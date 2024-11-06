@@ -268,7 +268,7 @@ int GenerateRandChild(Human* h){
     int random_child;
     int NumberOfChild = 0;
 
-    // If Age < 15, return 0
+    // If Age < 15 or > 50, returns 0
     if(h->Age < 15) return 0;
     if(h->Age > 50) return 0;
 
@@ -308,6 +308,21 @@ unsigned char GenerateRandomDeath(Human* h){
     return 0;
 }
 
+short GenerateRandomDNA(){
+    short DNA = 0;
+    char hair_color = rand()%4;
+    char eyes_color = rand()%4;
+    char morphotype = rand()%3;
+    char blood_type = rand()%4;
+
+    DNA |= hair_color << DNA_HAIR_COLOR;
+    DNA |= eyes_color << DNA_EYES_COLOR;
+    DNA |= morphotype << DNA_MORPHOTYPE;
+    DNA |= blood_type << DNA_BLOODTYPE;
+
+    return DNA;
+}
+
 char* GenerateRandomFirstname(unsigned short Gender){
     int random_int = rand()%FirstNameLaw->Total[Gender];
     char* random_name = malloc(FIRSTNAME_MAX_SIZE);
@@ -339,6 +354,7 @@ void PrintHuman(Human* h){
         printf("FEMALE\n");
     }
     printf("Age      : %d\n", h->Age);
+    printf("DNA      : %d\n", h->DNA);
 
     if(h->Partner != NULL){
         printf("Couple   : %s %s\n", h->Partner->FirstName, h->Partner->LastName);

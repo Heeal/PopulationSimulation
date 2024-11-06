@@ -2,17 +2,75 @@
 #define GENDER_FEMALE 1
 #define GENDER_ALL 2
 
+/* ADN MASK */
+#define DNA_GENDER        0
+#define DNA_HAIR_COLOR    1
+#define DNA_EYES_COLOR    3
+#define DNA_MORPHOTYPE    5
+#define DNA_BLOODTYPE     7
+
+/* DNA TRAIT */
+#define DNA_HAIR_COLOR_BLACK 0b00
+#define DNA_HAIR_COLOR_BROWN 0b01
+#define DNA_HAIR_COLOR_BLOND 0b10
+#define DNA_HAIR_COLOR_RED   0b11
+
+#define DNA_EYES_COLOR_BLACK 0b00
+#define DNA_EYES_COLOR_BROWN 0b01
+#define DNA_EYES_COLOR_BLUE  0b10
+#define DNA_EYES_COLOR_GREEN 0b11
+
+#define DNA_MORPHOTYPE_ENDOMORPH 0b00
+#define DNA_MORPHOTYPE_MESOMORPH 0b01
+#define DNA_MORPHOTYPE_ECTOMORPH 0b10
+
+#define DNA_BLOOTYPE_O  0b00
+#define DNA_BLOOTYPE_A  0b01
+#define DNA_BLOOTYPE_B  0b10
+#define DNA_BLOOTYPE_AB 0b11
+
+typedef struct DNA{      
+    /*
+    
+Bit:    32-10        09          08           07           06        05     04     03     02     01
+    ----------------------------------------------------------------------------------------------------
+       NOT USED | BLOODTYPE | BLOODTYPE | MORPHOTYPE | MORPHOTYPE | EYES | EYES | HAIR | HAIR | GENDER |
+    ----------------------------------------------------------------------------------------------------
+
+
+    HAIR : 
+        00 => Black
+        01 => Brown
+        10 => Blond
+        11 => Red
+    EYES : 
+        00 => Black
+        01 => Brown
+        10 => Blue
+        11 => Green
+
+    MORPHOTYPE :
+        00 : Endomorph 
+        01 : Mesomorph
+        10 : Ectomorph
+
+    BLOOD TYPE :
+        00 : O
+        01 : A
+        10 : B
+        11 : AB
+    */
+    short traits;
+} DNA;
+
 typedef struct Human{
     /* Identity */
     char* FirstName;
     char* LastName;
     unsigned char Age;
     unsigned char Gender;
+    short DNA;
     unsigned char Dead;
-
-    /* Life */
-    int Job;
-    int Salary;
 
     /* Family */
     struct Human* Parents[2];

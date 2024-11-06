@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv){
     DataManagementInit();
-    Population* TotalPopulation = GeneratePopulation(50000);
+    Population* TotalPopulation = GeneratePopulation(1000000);
     
     for(int year = 0; year<1000; year++){
         Stats* s = SimulateNextYear(TotalPopulation);

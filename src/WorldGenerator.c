@@ -54,6 +54,10 @@ void DeallocatePopulation(Population* pop){
 void DeallocateHuman(Human* h){
     DeallocatePopulation(h->Childs);
     free(h->FirstName);
+    free(h->LastName);
+    if(h->Parents[0] != NULL) free(h->Parents[0]);
+    if(h->Parents[1] != NULL) free(h->Parents[1]);
+    free(h->Parents);
     free(h);
 }
 
@@ -137,13 +141,14 @@ void PrintPopulation(Population* pop){
     }
 }
 
-Human* GenerateRandomChild(Human* Father){
+Human* GenerateRandomChild(Human* Mother, Human* Father){
     Human* h = AllocateHuman();
     h->Gender = GenerateRandomGender();
     h->FirstName = GenerateRandomFirstname(h->Gender);
     h->LastName = malloc(50);
     strcpy(h->LastName, Father->LastName);
     h->Age = 0;
+    h->DNA = GenerateRandomDNA();
     AddHumanToPopulation(TotalPopulation, h);
     return h;
 }
@@ -156,6 +161,7 @@ Human* GenerateRandomHumanByAge(unsigned char MinAge, unsigned char MaxAge){
     h->LastName = GenerateRandomLastName();
     // Lastname to be set when generating family tree
     h->Age = GenerateRandomAge(MinAge, MaxAge);
+    h->DNA = GenerateRandomDNA();
     AddHumanToPopulation(TotalPopulation, h);
     return h;
 }
@@ -169,6 +175,7 @@ Human* GenerateRandomHuman(){
     h->Gender = GenerateRandomGender();
     h->FirstName = GenerateRandomFirstname(h->Gender);
     h->LastName = GenerateRandomLastName();
+    h->DNA = GenerateRandomDNA();
     // Lastname to be set when generating family tree
     h->Age = rand()%MAX_AGE;
     AddHumanToPopulation(TotalPopulation, h);
@@ -241,7 +248,7 @@ int GenerateChilds(Population* pop){
                 for(int k=0;k<NbOfChilds;k++){
                     // Create a Child
                     Human* child = AllocateHuman();
-                    child = GenerateRandomChild(current->Info->Partner);
+                    child = GenerateRandomChild(current->Info, current->Info->Partner);
 
                     // printf("New Child from %s %s and %s %s => %s %s\n", current->Info->FirstName, current->Info->LastName, current->Info->Partner->FirstName, current->Info->Partner->LastName, child->FirstName, child->LastName);
                     child->Parents[GENDER_FEMALE] = current->Info;
@@ -295,6 +302,7 @@ int GenerateDeath(Population* pop){
             TotalDeaths++;
             current = tmp->next;
             CheckAnomalies(pop);
+            // DeallocateHuman(tmp->Info);
         }else{
             current = current->next;
         }
